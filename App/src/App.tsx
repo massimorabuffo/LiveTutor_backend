@@ -8,12 +8,50 @@ const elements: ToDo[] = [{id: 1, title: 'todo_1'}, {id: 2, title: 'todo_2', com
 
 function App() {
   const [toDo, setToDo] = useState<ToDo[]>(elements);
+  const [editToDo, setEditToDo] = useState<null | ToDo>()
+
+  
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void  => {
+    e.preventDefault()
+    const data = new FormData(e.target as HTMLFormElement)
+    const title = data.get("title") as string
+    const completed = data.get("completed") as string
+    setToDo(prev => [...prev, {id: Math.random(), title, completed: completed === "on" ? true : false}])
+  }
+
+  const handleEditToDo = (el: ToDo) => {
+    setEditToDo(el)
+  }
+
+  const handleChangeInput = (e: any) => {
+    setEditToDo(prev => {return {
+      ...prev,
+      title: e.target.title
+    } as ToDo})
+  }
+
+  const handleChangeCheck = (e: any) => {
+    setEditToDo(prev => {return{
+      ...prev,
+      completed: e.target.completed === "on" ? true : false
+    } as ToDo})
+  }
 
   return (
     <>
-    <InputForm handleSubmit={(e) => console.log(e)}/>
+    <InputForm handleSubmit={handleSubmit}/>
     <ul>
-      {toDo.map(el => <ToDoList key={el.id} title={el.title} completed={el.completed}/>)}
+      {toDo.map(el => 
+      <>
+        <ToDoList key={el.id} id={el.id} title={el.title} completed={el.completed} editToDo={() => handleEditToDo(el)}/>
+        {editToDo?.id === el.id && 
+        <>
+          <input type='text' onChange={handleChangeInput} value={editToDo.title}/> 
+          <input type='checkbox' onChange={handleChangeCheck} checked={editToDo.completed}/>
+        </>
+          }
+      </>
+      )}
     </ul>
     </>
   )

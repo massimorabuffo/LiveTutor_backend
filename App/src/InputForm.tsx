@@ -10,11 +10,11 @@ const InputForm = ({handleSubmit}: InputFormProps) => {
 
     return (
         <>
-        <form onSubmit={handleSubmit}>
-            <input type="text" />
-            <input type="checkbox" />
-            <button>Submit</button>
-        </form>
+            <form onSubmit={handleSubmit}>
+                <input name="title" type="text" />
+                <input name="completed" type="checkbox"  />
+                <button>Submit</button>
+            </form>
         </>
     )
 }
