@@ -3,13 +3,16 @@ import './App.css'
 import InputForm from './InputForm'
 import ToDoList from './ToDoList'
 import { ToDo } from './models'
+import useFetchToDo from './useFetch'
 
-const elements: ToDo[] = [{id: 1, title: 'todo_1'}, {id: 2, title: 'todo_2', completed: false}]
 
 function App() {
-  const [toDo, setToDo] = useState<ToDo[]>(elements);
-  const [editToDo, setEditToDo] = useState<null | ToDo>()
 
+  const{data,error,isLoading}=useFetchToDo();
+
+  const [toDo, setToDo] = useState<ToDo[]|undefined>(data);
+  const [editToDo, setEditToDo] = useState<null | ToDo>()
+  
   
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void  => {
     e.preventDefault()
@@ -37,11 +40,28 @@ function App() {
     } as ToDo})
   }
 
+    if(error) {
+      return (
+        <>
+        <p> Error</p>
+        </>
+      )
+    }
+
+
+    if(isLoading) {
+      return (
+        <>
+        <p>Loading...</p>
+        </>
+      )
+    }
+
   return (
     <>
     <InputForm handleSubmit={handleSubmit}/>
     <ul>
-      {toDo.map(el => 
+      {toDo?.map(el => 
       <>
         <ToDoList key={el.id} id={el.id} title={el.title} completed={el.completed} editToDo={() => handleEditToDo(el)}/>
         {editToDo?.id === el.id && 
