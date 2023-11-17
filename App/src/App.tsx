@@ -1,17 +1,28 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import InputForm from './InputForm'
 import ToDoList from './ToDoList'
 import { ToDo } from './models'
 import useFetchToDo from './useFetch'
+import axios from 'axios'
+import useSWR from "swr";
+
 
 
 function App() {
 
+  
   const{data,error,isLoading}=useFetchToDo();
-
+  console.log(data);
+  
+  useEffect(()=>{
+  setToDo(data)
+  },[data])
   const [toDo, setToDo] = useState<ToDo[]|undefined>(data);
   const [editToDo, setEditToDo] = useState<null | ToDo>()
+
+
+  
   
   
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void  => {
@@ -40,6 +51,13 @@ function App() {
     } as ToDo})
   }
 
+  const fetchPort=()=>{
+
+axios.get("http://localhost:3001?id=1").then((res)=> res.data)
+
+  }
+
+
     if(error) {
       return (
         <>
@@ -63,7 +81,8 @@ function App() {
     <ul>
       {toDo?.map(el => 
       <>
-        <ToDoList key={el.id} id={el.id} title={el.title} completed={el.completed} editToDo={() => handleEditToDo(el)}/>
+        <ToDoList key={el.id} id={el.id} title={el.title} completed={el.completed} editToDo={() => handleEditToDo(el)} handleDelete={()=>fetchPort()}
+     />
         {editToDo?.id === el.id && 
         <>
           <input type='text' onChange={handleChangeInput} value={editToDo.title}/> 
