@@ -26,8 +26,9 @@ function App() {
   const handleChangeInput = (e: any) => {
     setEditToDo(prev => {return {
       ...prev,
-      title: e.target.title
+      title: e.target.value
     } as ToDo})
+    console.log(editToDo);
   }
 
   const handleChangeCheck = (e: any) => {
@@ -35,6 +36,15 @@ function App() {
       ...prev,
       completed: e.target.completed === "on" ? true : false
     } as ToDo})
+  }
+
+  const handleSaveEditToDo = () => {
+    setToDo(prev => prev.map(el => {
+      return (
+      if(el.id === editToDo.id){
+        el.title = editToDo.title;
+      })
+  }))
   }
 
   return (
@@ -48,6 +58,7 @@ function App() {
         <>
           <input type='text' onChange={handleChangeInput} value={editToDo.title}/> 
           <input type='checkbox' onChange={handleChangeCheck} checked={editToDo.completed}/>
+          <button onClick={handleSaveEditToDo}>Save</button>
         </>
           }
       </>
