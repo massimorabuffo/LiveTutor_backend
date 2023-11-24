@@ -1,15 +1,29 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import InputForm from './InputForm'
 import ToDoList from './ToDoList'
 import { ToDo } from './models'
+import useFetchToDo from './useFetch'
+import axios from 'axios'
+import useSWR from "swr";
 
-const elements: ToDo[] = [{id: 1, title: 'todo_1'}, {id: 2, title: 'todo_2', completed: false}]
+
 
 function App() {
-  const [toDo, setToDo] = useState<ToDo[]>(elements);
+
+  
+  const{data,error,isLoading}=useFetchToDo();
+  console.log(data);
+  
+  useEffect(()=>{
+  setToDo(data)
+  },[data])
+  const [toDo, setToDo] = useState<ToDo[]|undefined>(data);
   const [editToDo, setEditToDo] = useState<null | ToDo>()
 
+
+  
+  
   
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void  => {
     e.preventDefault()
@@ -38,22 +52,36 @@ function App() {
     } as ToDo})
   }
 
-  const handleSaveEditToDo = () => {
-    setToDo(prev => prev.map(el => {
-      return (
-      if(el.id === editToDo.id){
-        el.title = editToDo.title;
-      })
-  }))
+  const fetchPort=(id: number)=>{
+    axios.get(`http://localhost:3001?id=${id}`).then((res)=> res.data )
   }
+
+
+    if(error) {
+      return (
+        <>
+        <p> Error</p>
+        </>
+      )
+    }
+
+
+    if(isLoading) {
+      return (
+        <>
+        <p>Loading...</p>
+        </>
+      )
+    }
 
   return (
     <>
     <InputForm handleSubmit={handleSubmit}/>
     <ul>
-      {toDo.map(el => 
+      {toDo?.map(el => 
       <>
-        <ToDoList key={el.id} id={el.id} title={el.title} completed={el.completed} editToDo={() => handleEditToDo(el)}/>
+        <ToDoList key={el.id} id={el.id} title={el.title} completed={el.completed} editToDo={() => handleEditToDo(el)} handleDelete={()=>fetchPort(el.id)}
+     />
         {editToDo?.id === el.id && 
         <>
           <input type='text' onChange={handleChangeInput} value={editToDo.title}/> 
@@ -61,6 +89,7 @@ function App() {
           <button onClick={handleSaveEditToDo}>Save</button>
         </>
           }
+{/* a */}
       </>
       )}
     </ul>
