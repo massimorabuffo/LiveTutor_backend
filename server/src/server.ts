@@ -17,10 +17,14 @@ app.get('/api/todos', (req:Request, res:Response) => {
 
 app.delete("/api/todo/:id",(req:Request, res:Response) => {
   const {id} = req.params
-  if(id){
-    res.status(400).json({message:"erro id is null or undefined"}).end();
-  } 
-
+  if(!id){
+    return res.status(400).json({message:"erro id is null or undefined"});
+  }
+  if(elements.some(el => el.id === Number(id))){
+    elements = elements.filter(el => el.id === Number(id));
+    return res.status(200).json({message:`element '${id}' deleted`}).end();
+  }
+  res.status(400).json({message:`'${id}' does not exist as ID`});
 });
 
 app.listen(port, () => {
