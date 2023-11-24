@@ -52,8 +52,15 @@ function App() {
     } as ToDo})
   }
 
+<<<<<<< HEAD
   const fetchPort=(id: number)=>{
     axios.get(`http://localhost:3001?id=${id}`).then((res)=> res.data )
+=======
+  const handleDeleteTodo=(id:number)=>{
+
+  axios.delete(`http://localhost:3000/api/todo/${id}`).then((res)=> res.data)
+
+>>>>>>> fd4cfbf2ea535c27ea2726b9acb92bd3ab31579f
   }
 
 
@@ -80,7 +87,11 @@ function App() {
     <ul>
       {toDo?.map(el => 
       <>
+<<<<<<< HEAD
         <ToDoList key={el.id} id={el.id} title={el.title} completed={el.completed} editToDo={() => handleEditToDo(el)} handleDelete={()=>fetchPort(el.id)}
+=======
+        <ToDoList key={el.id} id={el.id} title={el.title} completed={el.completed} editToDo={() => handleEditToDo(el)} handleDelete={()=>handleDeleteTodo(el.id)}
+>>>>>>> fd4cfbf2ea535c27ea2726b9acb92bd3ab31579f
      />
         {editToDo?.id === el.id && 
         <>
