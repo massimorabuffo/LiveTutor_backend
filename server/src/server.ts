@@ -5,6 +5,13 @@ import { Request, Response } from "express";
 import { ToDo } from './models/todo';
 import { log } from 'console';
 
+import Joi from "joi";
+
+export const toDoCreateScheme=Joi.object({
+    title:Joi.string().required(),
+    completed:Joi.string().max(4).required()
+})
+
 const app = express();
 app.use(morgan('dev'));
 const port = 3000;
@@ -27,9 +34,18 @@ app.delete("/api/todo/:id",(req:Request, res:Response) => {
   res.status(400).json({message:`'${id}' does not exist as ID`});
 });
 
+app.get("/api/todo/create",(req:Request, res:Response) => {
+  console.log(req.query)
+  const data=req.query
+  const validate=toDoCreateScheme.validate(data)
+  console.log(validate);
+  return res.status(200).json({message:"end"}).end();
+})
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
   });
+
 
 
 

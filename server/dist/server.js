@@ -1,6 +1,11 @@
 import express from 'express';
 import morgan from 'morgan';
 import "express-async-errors";
+import Joi from "joi";
+export const toDoCreateScheme = Joi.object({
+    title: Joi.string().required(),
+    completed: Joi.string().max(4).required()
+});
 const app = express();
 app.use(morgan('dev'));
 const port = 3000;
@@ -18,6 +23,13 @@ app.delete("/api/todo/:id", (req, res) => {
         return res.status(200).json({ message: `element '${id}' deleted` }).end();
     }
     res.status(400).json({ message: `'${id}' does not exist as ID` });
+});
+app.get("/api/todo/create", (req, res) => {
+    console.log(req.query);
+    const data = req.query;
+    const validate = toDoCreateScheme.validate(data);
+    console.log(validate);
+    return res.status(200).json({ message: "end" }).end();
 });
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

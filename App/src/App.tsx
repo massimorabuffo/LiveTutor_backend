@@ -25,13 +25,25 @@ function App() {
   
   
   
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void  => {
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>)   => {
     e.preventDefault()
     const data = new FormData(e.target as HTMLFormElement)
     const title = data.get("title") as string
     const completed = data.get("completed") as string
-    setToDo(prev => [...prev, {id: Math.random(), title, completed: completed === "on" ? true : false}])
+   
+    try{
+      
+      const result = await axios.get(`http://localhost:3000/api/todo/create`,{ params: { title,completed } })
+      if(result.status === 200){
+        const result = await axios.get("http://localhost:3000/api/todos");
+        setToDo(result.data);
+      }
+    }catch(error){
+      console.error(error);
+    }
   }
+  
+
 
   const handleEditToDo = (el: ToDo) => {
     setEditToDo(el)
@@ -89,13 +101,13 @@ function App() {
       <>
         <ToDoList key={el.id} id={el.id} title={el.title} completed={el.completed} editToDo={() => handleEditToDo(el)} handleDelete={()=>handleDeleteTodo(el.id)}
      />
-        {editToDo?.id === el.id && 
+       {/*  {editToDo?.id === el.id && 
         <>
           <input type='text' onChange={handleChangeInput} value={editToDo.title}/> 
           <input type='checkbox' onChange={handleChangeCheck} checked={editToDo.completed}/>
-          <button onClick={handleSaveEditToDo}>Save</button>
+          <button type='submit'>Save</button>
         </>
-          }
+          } */}
 {/* a */}
       </>
       )}
