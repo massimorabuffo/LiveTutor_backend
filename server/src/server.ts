@@ -4,14 +4,12 @@ import "express-async-errors"
 import { Request, Response } from "express";
 import { ToDo } from './models/todo';
 import { log } from 'console';
+import { toDoCreateScheme } from './validation.js';
+import { setupDb } from './db.js';
 
-import Joi from "joi";
 
-export const toDoCreateScheme=Joi.object({
-    title:Joi.string().required(),
-    completed:Joi.string().max(4).required()
-})
 
+setupDb();
 const app = express();
 app.use(morgan('dev'));
 const port = 3000;

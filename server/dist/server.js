@@ -1,11 +1,9 @@
 import express from 'express';
 import morgan from 'morgan';
 import "express-async-errors";
-import Joi from "joi";
-export const toDoCreateScheme = Joi.object({
-    title: Joi.string().required(),
-    completed: Joi.string().max(4).required()
-});
+import { toDoCreateScheme } from './validation.js';
+import { setupDb } from './db.js';
+setupDb();
 const app = express();
 app.use(morgan('dev'));
 const port = 3000;
