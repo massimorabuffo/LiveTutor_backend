@@ -24,7 +24,6 @@ export const setupDb=async()=>{
     try {
         const response =await db.none(`
         INSERT INTO todos (title) VALUES ('compare pane');`)
-        console.log(response)
     } catch (error) {
         console.log(error)
     }

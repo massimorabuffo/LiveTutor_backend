@@ -27,7 +27,6 @@ export const setupDb = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield db.none(`
         INSERT INTO todos (title) VALUES ('compare pane');`);
-        console.log(response);
     }
     catch (error) {
         console.log(error);
