@@ -2,7 +2,8 @@ import express from 'express';
 import morgan from 'morgan';
 import "express-async-errors";
 import { setupDb } from './db.js';
-import { createTodos, deleteTodos, getAllTodos } from './controller/controller.js';
+import { createImage, createTodos, deleteTodos, getAllTodos, modifyTodo } from './controller/controller.js';
+import { upload } from "./uploadImage.js";
 setupDb();
 const app = express();
 app.use(express.json());
@@ -12,6 +13,8 @@ let elements = [{ id: 1, title: 'todo_1' }, { id: 2, title: 'todo_2', completed:
 app.get('/api/todos', getAllTodos);
 app.post("/api/todo/create", createTodos);
 app.delete("/api/todo/:id", deleteTodos);
+app.post("/api/todo/modify", modifyTodo);
+app.post("/api/todo/:id/image", upload.single("image"), createImage);
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });

@@ -9,7 +9,7 @@ export const db=pgPromise()({
     port:5432,
     database:"postgres",
     user:"postgres",
-    password:"postgres"
+    password:"postgress"
 })
 
 export const setupDb=async()=>{
@@ -18,7 +18,8 @@ export const setupDb=async()=>{
         CREATE TABLE IF NOT EXISTS todos(
         id SERIAL NOT NULL PRIMARY KEY,
         title TEXT NOT NULL ,
-        completed TEXT 
+        completed TEXT,
+        imagePath TEXT
         );
     `)
     try {

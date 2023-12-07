@@ -6,7 +6,8 @@ import { ToDo } from './models/todo';
 import { log } from 'console';
 import { toDoCreateScheme } from './validation.js';
 import { setupDb } from './db.js';
-import { createTodos, deleteTodos, getAllTodos } from './controller/controller.js';
+import { createImage, createTodos, deleteTodos, getAllTodos, modifyTodo } from './controller/controller.js';
+import {upload} from "./uploadImage.js"
 
 
 setupDb();
@@ -22,6 +23,10 @@ app.get('/api/todos',getAllTodos);
 app.post("/api/todo/create",createTodos)
 
 app.delete("/api/todo/:id",deleteTodos);
+
+app.post("/api/todo/modify", modifyTodo);
+
+app.post("/api/todo/:id/image", upload.single("image"), createImage)
 
 
 app.listen(port, () => {

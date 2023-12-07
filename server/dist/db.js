@@ -13,7 +13,7 @@ export const db = pgPromise()({
     port: 5432,
     database: "postgres",
     user: "postgres",
-    password: "postgres"
+    password: "postgress"
 });
 export const setupDb = () => __awaiter(void 0, void 0, void 0, function* () {
     yield db.none(`
@@ -21,7 +21,8 @@ export const setupDb = () => __awaiter(void 0, void 0, void 0, function* () {
         CREATE TABLE IF NOT EXISTS todos(
         id SERIAL NOT NULL PRIMARY KEY,
         title TEXT NOT NULL ,
-        completed TEXT 
+        completed TEXT,
+        imagePath TEXT
         );
     `);
     try {

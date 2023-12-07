@@ -41,3 +41,26 @@ export const deleteTodos= async(req:Request,res:Response)=>{
   } 
  return res.status(200).json({message:`'${id}' corrisponding todos deleted`})
 }
+
+export const modifyTodo = async(req:Request,res:Response) => {
+    const {id, title, completed} = req.body;
+
+    if(!id){
+        return res.status(400).json({message:"erro id is null or undefined"});
+    }
+    
+    const updatedId = await db.oneOrNone(`UPDATE todos SET title=$1, completed=$2 WHERE id=$3 RETURNING *`, [title, completed, id]);
+
+    if(updatedId){
+        return res.status(200).json({msg: "Todo was updated."})
+    }
+}
+
+export const createImage = async (req:Request,res:Response) => {
+    const {id} = req.params;
+    const filePath = req.file?.path;
+    console.log(filePath);
+
+    await db.oneOrNone(`UPDATE todos SET imagePath=$1 WHERE id=$2`, [filePath, id])
+    res.status(200).json({msg: "Operazione andata a buon fine."})
+}

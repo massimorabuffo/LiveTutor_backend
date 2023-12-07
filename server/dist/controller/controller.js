@@ -41,3 +41,21 @@ export const deleteTodos = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
     return res.status(200).json({ message: `'${id}' corrisponding todos deleted` });
 });
+export const modifyTodo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id, title, completed } = req.body;
+    if (!id) {
+        return res.status(400).json({ message: "erro id is null or undefined" });
+    }
+    const updatedId = yield db.oneOrNone(`UPDATE todos SET title=$1, completed=$2 WHERE id=$3 RETURNING *`, [title, completed, id]);
+    if (updatedId) {
+        return res.status(200).json({ msg: "Todo was updated." });
+    }
+});
+export const createImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const { id } = req.params;
+    const filePath = (_a = req.file) === null || _a === void 0 ? void 0 : _a.path;
+    console.log(filePath);
+    yield db.oneOrNone(`UPDATE todos SET imagePath=$1 WHERE id=$2`, [filePath, id]);
+    res.status(200).json({ msg: "Operazione andata a buon fine." });
+});
